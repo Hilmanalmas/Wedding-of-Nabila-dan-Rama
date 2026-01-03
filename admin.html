@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding Admin Dashboard</title>
+    <link rel="icon" type="image/png" href="Media/N&R.png">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #D4AF37;
+            padding-bottom: 10px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        /* Form Styles */
+        .form-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #D4AF37;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #b59021;
+        }
+
+        .result-box {
+            background: #eee;
+            padding: 10px;
+            border-radius: 4px;
+            word-break: break-all;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f8f8f8;
+            font-weight: 700;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .status-attending {
+            color: green;
+            font-weight: bold;
+        }
+
+        .status-not {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Wedding Admin Dashboard</h1>
+
+        <!-- Generator Section -->
+        <div class="section">
+            <h2>Guest Link Generator</h2>
+            <p>Enter guest names (one per line) to generate their unique invitation links.</p>
+            <div class="form-group" style="flex-direction: column;">
+                <textarea id="guestNameInput" rows="5" placeholder="Budi Santoso&#10;Siti Aminah&#10;Joko Widodo"
+                    style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #ddd;"></textarea>
+                <button onclick="generateLinks()" style="align-self: flex-start;">Generate Links</button>
+            </div>
+            <div id="linkResult" class="result-box"
+                style="display:none; flex-direction: column; align-items: flex-start; gap: 10px;">
+                <div
+                    style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                    <strong>Generated Links:</strong>
+                    <button onclick="copyAllLinks()"
+                        style="font-size: 0.8rem; padding: 5px 10px; background: #333;">Copy All</button>
+                </div>
+                <textarea id="generatedLinksOutput" rows="5"
+                    style="width: 100%; padding: 10px; border: 1px solid #ccc; font-family: monospace; font-size: 0.9rem;"
+                    readonly></textarea>
+            </div>
+        </div>
+
+        <!-- RSVP Data Section -->
+        <div class="section">
+            <h2>RSVP Submissions</h2>
+            <button onclick="loadRSVPs()" style="margin-bottom: 10px; background: #333;">Refresh Data</button>
+            <button onclick="clearData()" style="margin-bottom: 10px; background: #d9534f; float: right;">Clear All
+                Data</button>
+
+            <table id="rsvpTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Attendance</th>
+                        <th>Message</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data will be inserted here -->
+                </tbody>
+            </table>
+            <p id="noDataMsg" style="text-align: center; margin-top: 20px; color: #666;">No RSVPs yet.</p>
+        </div>
+    </div>
+
+    <script>
+        // Link Generator Logic
+        function generateLinks() {
+            const input = document.getElementById('guestNameInput').value;
+            if (!input.trim()) return alert("Please enter at least one name");
+
+            const names = input.split('\n').filter(name => name.trim() !== '');
+            const baseUrl = window.location.href.replace('admin.html', 'index.html');
+
+            let outputText = "";
+
+            names.forEach(name => {
+                const cleanName = name.trim();
+                // Encode properly
+                const link = `${baseUrl}?to=${encodeURIComponent(cleanName)}`;
+                outputText += `${cleanName}: ${link}\n`;
+            });
+
+            const outputArea = document.getElementById('generatedLinksOutput');
+            outputArea.value = outputText;
+            document.getElementById('linkResult').style.display = 'flex';
+        }
+
+        function copyAllLinks() {
+            const outputArea = document.getElementById('generatedLinksOutput');
+            outputArea.select();
+            document.execCommand('copy'); // Fallback/Standard for textareas
+
+            // Modern approach if preferred, but execCommand works well for sticky selection
+            // navigator.clipboard.writeText(outputArea.value)...
+
+            alert("All links copied to clipboard!");
+        }
+
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyHWZKq17bBZPi37abZ_rgOKFL4_1zvs8cKGJbnq1gfd9dAjLh2xjgADuGsUOzSK5vB1A/exec";
+
+        // RSVP Table Logic
+        function loadRSVPs() {
+            const tbody = document.querySelector('#rsvpTable tbody');
+            const noDataMsg = document.getElementById('noDataMsg');
+            const refreshBtn = document.querySelector('button[onclick="loadRSVPs()"]');
+            
+            tbody.innerHTML = ''; // Clear current
+            refreshBtn.textContent = "Loading...";
+            noDataMsg.style.display = 'none';
+
+            fetch(SCRIPT_URL)
+            .then(response => response.json())
+            .then(data => {
+                // Data format: [{timestamp, name, attendance, message}, ...]
+                if (data.length === 0) {
+                    noDataMsg.style.display = 'block';
+                    return;
+                }
+
+                // Sort by newest first
+                data.reverse().forEach(entry => {
+                    const tr = document.createElement('tr');
+
+                    // Status styling
+                    const statusClass = entry.attendance === 'Attending' ? 'status-attending' : 'status-not';
+                    
+                    // Format date roughly
+                    let dateStr = entry.timestamp;
+                    try {
+                        const d = new Date(entry.timestamp);
+                        if(!isNaN(d.getTime())) dateStr = d.toLocaleString();
+                    } catch(e) {}
+
+                    tr.innerHTML = `
+                    <td>${escapeHtml(entry.name)}</td>
+                    <td class="${statusClass}">${entry.attendance}</td>
+                    <td>${escapeHtml(entry.message)}</td>
+                    <td style="font-size: 0.85rem; color: #666;">${dateStr}</td>
+                `;
+                    tbody.appendChild(tr);
+                });
+            })
+            .catch(err => {
+                console.error(err);
+                noDataMsg.textContent = "Error loading data. Check console.";
+                noDataMsg.style.display = 'block';
+            })
+            .finally(() => {
+                refreshBtn.textContent = "Refresh Data";
+            });
+        }
+        
+        // Removed clearData() as it is dangerous/unsupported via this API
+
+        // Helper to prevent XSS in admin view
+        function escapeHtml(text) {
+            if (!text) return "";
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // Load on start
+        loadRSVPs();
+    </script>
+
+</body>
+
+</html>

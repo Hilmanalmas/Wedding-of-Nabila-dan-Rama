@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Wedding of Nabila & Rama</title>
+    <!-- Favicon: Using user provided logo.png -->
+    <link rel="icon" type="image/png" href="Media/N&R.png">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400&display=swap"
+        rel="stylesheet">
+    <!-- Icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Audio Element -->
+    <audio id="bg-music" loop>
+        <!-- Placeholder source, user can replace this -->
+        <source src="Media/Sal Priadi - Lewat sudah pukul dua, makin banyak bicara kita (Official Lyric Video) CUT.mp3"
+            type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Floating Music Control -->
+    <div class="music-control" id="music-btn" onclick="toggleMusic()">
+        <i class='bx bxs-music'></i>
+    </div>
+
+    <!-- Welcome Overlay -->
+    <section id="welcome-screen" class="welcome-screen">
+        <div class="welcome-content">
+            <p class="subtitle">The Wedding of</p>
+            <h1 class="title">Nabila & Rama</h1>
+            <div class="divider"></div>
+            <p class="guest-text">Dear,</p>
+            <h2 id="guest-name" class="guest-name">Guest Name</h2>
+            <p class="invite-text">You are invited to witness our vows and joy</p>
+            <button class="open-btn" onclick="openInvitation()">
+                <i class='bx bx-envelope-open'></i> Open Invitation
+            </button>
+        </div>
+        <p class="water-mark">Made by <i class='bx bxl-instagram'></i>hilmann_alms</p>
+    </section>
+
+    <!-- Main Content (Hidden Initially) -->
+    <main id="main-content" class="hidden">
+
+        <div class="layout-container">
+            <!-- Left/Top: Invitation Content -->
+            <div class="invitation-column">
+                <!-- Canva Embed -->
+                <div class="canva-wrapper">
+                    <iframe loading="lazy" class="canva-frame"
+                        src="https://www.canva.com/design/DAG88v1TK2Q/XpfmS5UxDIzhSHo0jgb06g/view?embed"
+                        allowfullscreen="allowfullscreen" allow="fullscreen">
+                    </iframe>
+                </div>
+            </div>
+
+            <!-- Right/Bottom (or Side for Mobile): Interactive Elements -->
+            <div class="sidebar-column">
+                <!-- Map Section -->
+                <div class="card map-card">
+                    <h3><i class='bx bx-map'></i> Location</h3>
+                    <p class="location-text">Our Venue Location</p>
+                    <div class="map-container">
+                        <!-- Customizable Map Iframe (Google Maps) -->
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3957.1786113091375!2d110.0348262734879!3d-7.333828092674614!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a9fda507c6a9f%3A0x7175d1b4f7385dfe!2sKledung%20Park!5e0!3m2!1sid!2sid!4v1767096351449!5m2!1sid!2sid"
+                            width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
+
+                <!-- RSVP Section -->
+                <div class="card rsvp-card">
+                    <h3><i class='bx bx-calendar-heart'></i> RSVP</h3>
+                    <p>Will you attend?</p>
+                    <form id="rsvp-form" onsubmit="submitRSVP(event)">
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" name="name" required placeholder="Guest Name">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Attendance</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="attendance" value="Attending" required>
+                                    <span><i class='bx bx-check-circle'></i> I will attend</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="attendance" value="Not Attending">
+                                    <span><i class='bx bx-x-circle'></i> Sorry, I won't be able to attend</span>
+                                </label>
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="3"
+                                placeholder="Write your wishes here..."></textarea>
+                        </div>
+
+                        <button type="submit" class="submit-btn">Send Confirmation</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Message Wall Section -->
+        <section id="message-wall-section" class="message-wall-section hidden">
+            <h2 class="message-title">Wishes from Friends</h2>
+            <div id="message-container" class="message-container">
+                <!-- Bubbles injected here -->
+            </div>
+        </section>
+
+    </main>
+
+    <div id="scroll-indicator" class="scroll-indicator hidden">
+        <p>Scroll down for RSVP</p>
+        <i class='bx bx-chevron-down'></i>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

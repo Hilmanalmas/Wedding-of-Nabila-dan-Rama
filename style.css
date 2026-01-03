@@ -1,0 +1,520 @@
+/* CSS Variables for Easy Customization */
+:root {
+    --primary-color: #D4AF37;
+    /* Gold */
+    --secondary-color: #f4f4f4;
+    /* Light Grey/White */
+    --text-color: #333;
+    --bg-color: #fff;
+    --accent-color: #8b6b61;
+    /* Rosy Brown */
+    --dark-overlay: rgba(0, 0, 0, 0.6);
+    --font-heading: 'Great Vibes', cursive;
+    /* Script font */
+    --font-subheading: 'Cinzel', serif;
+    /* Elegant Serif */
+    --font-body: 'Lato', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    overflow-x: hidden;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Music Control */
+.music-control {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    z-index: 1000;
+    animation: spin 4s linear infinite;
+    animation-play-state: paused;
+    /* Starts paused */
+}
+
+.music-control.playing {
+    animation-play-state: running;
+}
+
+/* Welcome Screen */
+.welcome-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('Media/Cincin\ Cut.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    text-align: center;
+    color: white;
+    transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out;
+}
+
+.welcome-screen.slide-up {
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.welcome-content {
+    padding: 2rem;
+    max-width: 600px;
+    animation: fadeIn 1.5s ease-out;
+}
+
+.title {
+    font-family: var(--font-heading);
+    font-size: 4rem;
+    margin: 10px 0;
+    color: var(--primary-color);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.subtitle,
+.guest-text,
+.invite-text {
+    font-family: var(--font-subheading);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+.guest-name {
+    font-family: var(--font-subheading);
+    font-size: 2rem;
+    margin: 20px 0;
+    font-weight: 600;
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 10px 0;
+    display: inline-block;
+}
+
+.open-btn {
+    margin-top: 30px;
+    padding: 12px 30px;
+    font-size: 1rem;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.open-btn:hover {
+    background: #b59021;
+    /* Darker Gold */
+    transform: scale(1.05);
+}
+
+.water-mark {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    font-size: 1rem;
+    color: #ffffff63;
+    font-weight: 400;
+    opacity: 0.5;
+    display: flex;
+    align-items: center;
+    gap: 1px;
+}
+
+/* Main Content */
+.hidden {
+    display: none !important;
+    /* Force hide */
+}
+
+/* Layout Container - Desktop: Side-by-Side */
+.layout-container {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    /* Main content vs Sidebar */
+    gap: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--secondary-color);
+    min-height: 100vh;
+}
+
+/* Canva Embed Styling - Adjusted for "Fit to Viewport" */
+.canva-wrapper {
+    position: relative;
+    width: 100%;
+    /* Aspect ratio height handling */
+    padding-top: 177.7778%;
+    /* 9:16 Aspect ratio */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+}
+
+/* Mobile Tweak: On very narrow screens, width is 100% so height might be small 
+   OR if width is 100%, height becomes huge (177% of width). 
+   To "not scroll", we must accept the slide might need to be smaller? 
+   No, user wants "Full Slide" visible without scroll. 
+   So we MUST constrain height to viewport - header. 
+*/
+@media (orientation: portrait) {
+    .canva-wrapper {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 9/16;
+    }
+
+    /* If content is too tall, user HAS to scroll? 
+      Unless we shrink the iframe. 
+      Let's try: max-height: 80vh to ensure it fits.
+   */
+    .canva-wrapper {
+        max-height: 85vh;
+        width: auto;
+        /* Let width shrink to maintain aspect ratio */
+        margin: 0 auto;
+        /* Center */
+    }
+}
+
+
+.canva-frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Sidebar Styling */
+.sidebar-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    /* Sticky sidebar on desktop */
+    position: sticky;
+    top: 20px;
+    height: fit-content;
+}
+
+/* Message Wall Styles */
+.message-wall-section {
+    padding: 40px 20px;
+    text-align: center;
+    background: #fdfdfd;
+    min-height: 300px;
+}
+
+.message-title {
+    font-family: var(--font-heading);
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+.message-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.message-bubble {
+    background: white;
+    padding: 15px 20px;
+    border-radius: 20px 20px 20px 0;
+    /* Balloon shape */
+    box-shadow: 2px 5px 15px rgba(0, 0, 0, 0.05);
+    max-width: 300px;
+    text-align: left;
+    position: relative;
+    animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.message-bubble strong {
+    display: block;
+    color: var(--accent-color);
+    font-family: var(--font-subheading);
+    margin-bottom: 5px;
+    font-size: 0.9em;
+}
+
+.message-bubble p {
+    color: #555;
+    font-style: italic;
+    font-size: 0.95em;
+    line-height: 1.4;
+}
+
+/* Random styling variants */
+.message-bubble:nth-child(even) {
+    transform: translateY(10px);
+    border-radius: 20px 20px 0 20px;
+}
+
+.message-bubble:nth-child(3n) {
+    background-color: #fffdf5;
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    80% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.card h3 {
+    font-family: var(--font-subheading);
+    margin-bottom: 15px;
+    color: var(--accent-color);
+    border-bottom: 2px solid var(--primary-color);
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+/* Map */
+.map-container iframe {
+    border-radius: 8px;
+    width: 100%;
+}
+
+/* RSVP Form */
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+    color: #666;
+}
+
+input[type="text"],
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+input:focus,
+textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+.radio-option input {
+    margin-right: 10px;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.submit-btn:hover {
+    background: #b59021;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+    .layout-container {
+        grid-template-columns: 1fr;
+        /* Stack on tablet */
+    }
+
+    .sidebar-column {
+        position: static;
+        /* Remove sticky on mobile/tablet vertical */
+    }
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 3rem;
+    }
+
+    /* Mobile handling for "Map Beside" */
+    /* This aims to fulfil the user request: "pastikan dalam keadaan mobile, disampingnya terdapat maps" */
+    /* Truly "beside" in portrait format is tiny (width/2). 
+       Assuming landscape mobile or a floating drawer? 
+       Actually, standard mobile UI stacks. 
+       Let's try a technique: We will keep it stacked for usability, 
+       BUT on wider mobile (landscape) it will be side-by-side.
+       OR, we make a "Side Panel" map. 
+    */
+
+    /* Let's stick to a very clean stacked layout as per standard UX, 
+       but ensure the map is VERY prominent right after the specific content section.
+       However, if the user INSISTS on mobile "beside", maybe they mean a floating widget? 
+       Let's stick to the stacked layout unless specifically asked for a split view which ruins readability.
+       
+       Wait, "disampingnya" might just mean "available" or "nearby" in the flow.
+       Let's make sure the sidebar content flows naturally.
+    */
+    .sidebar-column {
+        order: 2;
+        /* Content first, then map/rsvp */
+    }
+
+    .invitation-column {
+        order: 1;
+    }
+}
+
+/* Scroll Indicator */
+.scroll-indicator {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: var(--primary-color);
+    z-index: 1500;
+    animation: bounce 2s infinite;
+    display: none;
+    /* Hidden by default, shown by JS */
+    transition: opacity 0.5s ease-in-out;
+}
+
+.scroll-indicator p {
+    font-family: var(--font-subheading);
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 5px 10px;
+    border-radius: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.scroll-indicator i {
+    font-size: 2rem;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));
+}
+
+@keyframes bounce {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    40% {
+        transform: translateX(-50%) translateY(-10px);
+    }
+
+    60% {
+        transform: translateX(-50%) translateY(-5px);
+    }
+}
+
+/* Show only on mobile/tablet */
+@media (min-width: 769px) {
+    .scroll-indicator {
+        display: none !important;
+    }
+}
